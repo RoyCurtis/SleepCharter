@@ -142,10 +142,11 @@ function generateDOM()
             bar1.pairedBar = bar2;
             bar2.pairedBar = bar1;
 
+            // | 0 forces calculation to integer
             bar1.style.top    = "0px";
-            bar1.style.height = (height1 * minuteHeight) + "px";
+            bar1.style.height = ( (height1 * minuteHeight) | 0 ) + "px";
             bar2.style.bottom = "0px";
-            bar2.style.height = (height2 * minuteHeight) + "px";
+            bar2.style.height = ( (height2 * minuteHeight) | 0 ) + "px";
 
             fromDOM.appendChild(bar1);
             toDOM.appendChild(bar2);
@@ -160,14 +161,12 @@ function generateDOM()
             bar.from      = from;
             bar.to        = to;
 
-            bar.style.bottom = (getMinutesOfDay(from) * minuteHeight) + "px";
-            bar.style.height = (height * minuteHeight) + "px";
+            // | 0 forces calculation to integer
+            bar.style.bottom = ( (getMinutesOfDay(from) * minuteHeight) | 0 ) + "px";
+            bar.style.height = ( (height * minuteHeight) | 0 ) + "px";
+            fromDOM.appendChild(bar);
         }
-
-        fromDOM.appendChild(bar);
     }
-
-    console.log(DOM.dayBars);
 }
 
 /**
@@ -249,7 +248,7 @@ function parseDate(date)
         throw new Error("Date/time parsed incorrectly: " + date);
 
     return new Date(
-        matches[3], matches[2], matches[1],
+        matches[3], matches[2] - 1, matches[1],
         matches[4], matches[5], matches[6]
     );
 }
