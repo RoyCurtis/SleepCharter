@@ -23,7 +23,9 @@ var GOOGLE_DATETIME_REGEX =
     /(\d{2}).(\d{2}).(\d{4}) (\d{2}):(\d{2}):(\d{2})/;
 
 var STATE = {
-    entries: []
+    entries:  [],
+    earliest: new Date(),
+    latest:   new Date()
 };
 
 /*
@@ -35,6 +37,7 @@ function main()
     fetch('sleepData.csv')
         .then(processResponse)
         .then(processData)
+        .then(generateDOM)
         .catch(processError);
 }
 
@@ -49,6 +52,10 @@ function processResponse(response)
 function processData(data)
 {
     STATE.entries = parseCSV(data);
+}
+
+function generateDOM()
+{
     console.log(STATE.entries);
 }
 
@@ -97,7 +104,7 @@ function parseDate(date)
 
     if (!matches)
         throw new Error("Date/time failed to parse: " + date);
-    else if (matches.index != 0 || matches.length != 7)
+    else if (matches.index !== 0 || matches.length !== 7)
         throw new Error("Date/time parsed incorrectly: " + date);
 
     return new Date(
