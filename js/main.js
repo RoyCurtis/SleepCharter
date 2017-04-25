@@ -78,6 +78,15 @@ function main()
         }
     };
 
+    document.onwheel = function(e)
+    {
+        if (e.ctrlKey || e.shiftKey)
+            return;
+
+        window.scrollBy(e.deltaY, 0);
+        e.preventDefault();
+    };
+
     fetch('sleepData.csv')
         .then(processResponse)
         .then(processData)
