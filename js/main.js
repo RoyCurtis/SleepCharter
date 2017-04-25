@@ -25,13 +25,16 @@ var GOOGLE_DATETIME_REGEX =
 var DOM = {
     /** @type HTMLElement */
     sleepChart: null,
-    dayBars:    {}
+    dayBars:    {},
+    sleepBars:  []
 };
 
 var STATE = {
-    entries:  [],
+    entries:    [],
     /** @type HTMLElement */
-    selected: null
+    selected:   null,
+    rescaleIdx: 0,
+    rescaling:  false
 };
 
 /*
@@ -79,6 +82,7 @@ function main()
         .then(processResponse)
         .then(processData)
         .then(generateDOM)
+        .then(finalize)
         .catch(processError);
 }
 
@@ -104,8 +108,6 @@ function processData(data)
         else if (from < to) return -1;
         else                return 0;
     });
-
-    console.log(STATE.entries);
 }
 
 function generateDOM()
@@ -116,58 +118,61 @@ function generateDOM()
             from         = sleep[0],
             to           = sleep[1],
             fromDOM      = getDOMForDay(from),
-            toDOM        = getDOMForDay(to),
-            minuteHeight = fromDOM.clientHeight / 1440;
+            toDOM        = getDOMForDay(to);
 
         // Split sleeps that span across days
         if ( from.getDate() !== to.getDate() )
         {
             var bar1  = document.createElement("div"),
-                bar2  = document.createElement("div"),
-                from1 = new Date(from),
-                to1   = new Date(from),
-                from2 = new Date(to),
-                to2   = new Date(to);
-
-            to1.setHours(23, 59);
-            from2.setHours(0, 0);
-
-            // Split day bar into minute segments
-            var height1 = 1440 - getMinutesOfDay(from1),
-                height2 = getMinutesOfDay(to2);
+                bar2  = document.createElement("div");
 
             bar1.className = bar2.className = "bar broken";
             bar1.from      = bar2.from      = from;
             bar1.to        = bar2.to        = to;
+            bar1.isTopBar  = true;
             bar1.pairedBar = bar2;
             bar2.pairedBar = bar1;
 
-            // | 0 forces calculation to integer
-            bar1.style.top    = "0px";
-            bar1.style.height = ( (height1 * minuteHeight) | 0 ) + "px";
-            bar2.style.bottom = "0px";
-            bar2.style.height = ( (height2 * minuteHeight) | 0 ) + "px";
-
             fromDOM.appendChild(bar1);
             toDOM.appendChild(bar2);
+            DOM.sleepBars.push(bar1, bar2);
         }
         else
         {
             // Split day bar into minute segments
-            var bar    = document.createElement("div"),
-                height = getMinutesOfDay(to) - getMinutesOfDay(from);
-
+            var bar    = document.createElement("div");
             bar.className = "bar";
             bar.from      = from;
             bar.to        = to;
 
-            // | 0 forces calculation to integer
-            bar.style.bottom = ( (getMinutesOfDay(from) * minuteHeight) | 0 ) + "px";
-            bar.style.height = ( (height * minuteHeight) | 0 ) + "px";
             fromDOM.appendChild(bar);
+            DOM.sleepBars.push(bar);
         }
     }
 }
+
+function finalize()
+{
+    console.log(STATE, DOM);
+    rescaleSleeps();
+
+    document.body.onresize = function()
+    {
+        STATE.rescaleIdx = 0;
+
+        if (!STATE.rescaling)
+            rescaleSleeps();
+    }
+}
+
+function processError(error)
+{
+    console.error(error);
+}
+
+/*
+ * DOM handling
+ */
 
 /**
  * @param {Date} date
@@ -199,9 +204,55 @@ function getDOMForDay(date)
     return DOM.dayBars[year][month][day];
 }
 
-function processError(error)
+/**
+ * Note: Uses of "| 0" forces calculation into integer (rounded down)
+ */
+function rescaleSleeps()
 {
-    console.error(error);
+    if (STATE.rescaleIdx >= DOM.sleepBars.length)
+    {
+        console.log("Rescale done!");
+        STATE.rescaling = false;
+        return;
+    }
+    else
+    {
+        STATE.rescaling = true;
+        requestAnimationFrame(rescaleSleeps);
+    }
+
+    if (STATE.rescaleIdx === 0)
+        console.log("Beginning rescale...");
+
+    var bar          = DOM.sleepBars[STATE.rescaleIdx],
+        from         = bar.from,
+        to           = bar.to,
+        height       = 0,
+        minuteHeight = bar.parentNode.clientHeight / 1440;
+
+    if ( from.getDate() !== to.getDate() )
+    {
+        if (bar.isTopBar === true)
+        {
+            height = 1440 - getMinutesOfDay(from);
+            bar.style.top    = "0px";
+            bar.style.height = ( (height * minuteHeight) | 0 ) + "px";
+        }
+        else
+        {
+            height = getMinutesOfDay(to);
+            bar.style.bottom = "0px";
+            bar.style.height = ( (height * minuteHeight) | 0 ) + "px";
+        }
+    }
+    else
+    {
+        height = getMinutesOfDay(to) - getMinutesOfDay(from);
+        bar.style.bottom = ( (getMinutesOfDay(from) * minuteHeight) | 0 ) + "px";
+        bar.style.height = ( (height * minuteHeight) | 0 ) + "px";
+    }
+
+    STATE.rescaleIdx++;
 }
 
 /*
