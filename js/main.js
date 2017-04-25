@@ -22,6 +22,12 @@
 var GOOGLE_DATETIME_REGEX =
     /(\d{2}).(\d{2}).(\d{4}) (\d{2}):(\d{2}):(\d{2})/;
 
+var DOM = {
+    /** @type HTMLElement */
+    sleepChart: null,
+    dayBars:    {}
+};
+
 var STATE = {
     entries:  [],
     earliest: new Date(),
@@ -34,6 +40,8 @@ var STATE = {
 
 function main()
 {
+    DOM.sleepChart = document.querySelector("#sleepChart");
+
     fetch('sleepData.csv')
         .then(processResponse)
         .then(processData)
@@ -69,6 +77,49 @@ function processData(data)
 
 function generateDOM()
 {
+    for (var i = 0, len = STATE.entries.length; i < len; i++)
+    {
+        var sleep = STATE.entries[i],
+            from  = sleep[0],
+            to    = sleep[1];
+
+        getDOMForDay(from);
+        getDOMForDay(to);
+
+        var bar = document.createElement("div");
+        bar.className = "day";
+    }
+
+    console.log(DOM.dayBars);
+}
+
+/**
+ * @param {Date} date
+ */
+function getDOMForDay(date)
+{
+    var year  = date.getFullYear(),
+        month = date.getMonth(),
+        day   = date.getDate();
+
+    if ( !DOM.dayBars[year] )
+        DOM.dayBars[year] = new Array(12);
+
+    if ( !DOM.dayBars[year][month] )
+        DOM.dayBars[year][month] = new Array(31);
+
+    if ( !DOM.dayBars[year][month][day] )
+    {
+        var bar = DOM.dayBars[year][month][day] = document.createElement("div");
+        bar.className = "day";
+        bar.dataset.year  = year;
+        bar.dataset.month = month;
+        bar.dataset.day   = day;
+
+        DOM.sleepChart.appendChild(bar);
+    }
+
+    return DOM.dayBars[year][month][day];
 }
 
 function processError(error)
@@ -83,7 +134,7 @@ function processError(error)
 /** @param {string} csv */
 function parseCSV(csv)
 {
-    var lines = csv.split('\n');
+    var lines  = csv.split('\n');
 
     // Remove CSV header
     lines.shift();
