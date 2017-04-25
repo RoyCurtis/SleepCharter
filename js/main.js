@@ -185,20 +185,34 @@ function getDOMForDay(date)
         day   = date.getDate();
 
     if ( !DOM.dayBars[year] )
-        DOM.dayBars[year] = new Array(12);
+    {
+        var yearDiv = DOM.dayBars[year] = document.createElement("div");
+        yearDiv.className    = "year";
+        yearDiv.dataset.year = year;
+        yearDiv.innerHTML    = "<label>" + year + "</label>";
+
+        DOM.sleepChart.appendChild(yearDiv);
+    }
 
     if ( !DOM.dayBars[year][month] )
-        DOM.dayBars[year][month] = new Array(31);
+    {
+        var monthDiv  = DOM.dayBars[year][month] = document.createElement("div"),
+            monthText = date.toLocaleString("en-us", {month: 'long'});
+        monthDiv.className     = "month";
+        monthDiv.dataset.month = month;
+        monthDiv.innerHTML     = "<label>" + monthText + "</label>";
+
+        DOM.dayBars[year].appendChild(monthDiv);
+    }
 
     if ( !DOM.dayBars[year][month][day] )
     {
         var dayBar = DOM.dayBars[year][month][day] = document.createElement("div");
-        dayBar.className     = "day";
-        dayBar.dataset.year  = year;
-        dayBar.dataset.month = month;
-        dayBar.dataset.day   = day;
+        dayBar.className   = "day";
+        dayBar.dataset.day = day;
+        dayBar.innerHTML   = "<label>" + day + "</label>";
 
-        DOM.sleepChart.appendChild(dayBar);
+        DOM.dayBars[year][month].appendChild(dayBar);
     }
 
     return DOM.dayBars[year][month][day];
