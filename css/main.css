@@ -55,7 +55,7 @@ html, body
     position:   absolute;
 }
 
-.chart .day .bar.broken
+.chart .day .bar.selected
 {
-    background: hotpink;
+    background: blue;
 }

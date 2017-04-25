@@ -30,8 +30,8 @@ var DOM = {
 
 var STATE = {
     entries:  [],
-    earliest: new Date(),
-    latest:   new Date()
+    /** @type HTMLElement */
+    selected: null
 };
 
 /*
@@ -41,6 +41,39 @@ var STATE = {
 function main()
 {
     DOM.sleepChart = document.querySelector("#sleepChart");
+
+    DOM.sleepChart.onmouseover = function (evt)
+    {
+        /** @type HTMLElement */
+        var selected = evt.target;
+
+        // Do nothing if already hovering over same bar
+        if (STATE.selected === selected)
+            return;
+
+        // Remove selection class from previously selected bar
+        if (STATE.selected !== null)
+        {
+            STATE.selected.classList.remove("selected");
+
+            if (STATE.selected.pairedBar)
+                STATE.selected.pairedBar.classList.remove("selected");
+
+            STATE.selected = null;
+        }
+
+        // If started hovering over a(nother) bar
+        if ( selected.classList.contains("bar") )
+        {
+            STATE.selected = selected;
+            selected.classList.add("selected");
+
+            if (STATE.selected.pairedBar)
+                STATE.selected.pairedBar.classList.add("selected");
+
+            console.log(selected.from, selected.to);
+        }
+    };
 
     fetch('sleepData.csv')
         .then(processResponse)
@@ -106,6 +139,8 @@ function generateDOM()
             bar1.className = bar2.className = "bar broken";
             bar1.from      = bar2.from      = from;
             bar1.to        = bar2.to        = to;
+            bar1.pairedBar = bar2;
+            bar2.pairedBar = bar1;
 
             bar1.style.top    = "0px";
             bar1.style.height = (height1 * minuteHeight) + "px";
