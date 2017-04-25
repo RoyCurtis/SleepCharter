@@ -25,6 +25,8 @@ var GOOGLE_DATETIME_REGEX =
 var DOM = {
     /** @type HTMLElement */
     sleepChart: null,
+    /** @type HTMLElement */
+    timeAxis:   null,
     dayBars:    {},
     sleepBars:  []
 };
@@ -121,6 +123,26 @@ function processData(data)
 
 function generateDOM()
 {
+    var timeAxis = DOM.timeAxis = document.createElement("div");
+
+    timeAxis.className = "axis";
+
+    for (var h = 0; h < 24; h++)
+    {
+        var hourBox = document.createElement("div");
+
+        hourBox.className = "hour";
+        hourBox.innerHTML = h < 10
+            ? "0" + h
+            : h;
+
+        hourBox.innerHTML += ":00";
+
+        timeAxis.appendChild(hourBox);
+    }
+
+    DOM.sleepChart.appendChild(timeAxis);
+
     for (var i = 0, len = STATE.entries.length; i < len; i++)
     {
         var sleep        = STATE.entries[i],
@@ -132,8 +154,8 @@ function generateDOM()
         // Split sleeps that span across days
         if ( from.getDate() !== to.getDate() )
         {
-            var bar1  = document.createElement("div"),
-                bar2  = document.createElement("div");
+            var bar1 = document.createElement("div"),
+                bar2 = document.createElement("div");
 
             bar1.className = bar2.className = "bar broken";
             bar1.from      = bar2.from      = from;
@@ -149,7 +171,8 @@ function generateDOM()
         else
         {
             // Split day bar into minute segments
-            var bar    = document.createElement("div");
+            var bar = document.createElement("div");
+
             bar.className = "bar";
             bar.from      = from;
             bar.to        = to;
