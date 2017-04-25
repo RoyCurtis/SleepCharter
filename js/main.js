@@ -52,11 +52,23 @@ function processResponse(response)
 function processData(data)
 {
     STATE.entries = parseCSV(data);
+
+    // Ensure entries are sorted by earliest from-time to latest from-time
+    STATE.entries.sort( function(a, b)
+    {
+        var from = a[0].getTime(),
+            to   = b[0].getTime();
+
+        if      (from > to) return 1;
+        else if (from < to) return -1;
+        else                return 0;
+    });
+
+    console.log(STATE.entries);
 }
 
 function generateDOM()
 {
-    console.log(STATE.entries);
 }
 
 function processError(error)
