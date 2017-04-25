@@ -79,15 +79,57 @@ function generateDOM()
 {
     for (var i = 0, len = STATE.entries.length; i < len; i++)
     {
-        var sleep = STATE.entries[i],
-            from  = sleep[0],
-            to    = sleep[1];
+        var sleep        = STATE.entries[i],
+            from         = sleep[0],
+            to           = sleep[1],
+            fromDOM      = getDOMForDay(from),
+            toDOM        = getDOMForDay(to),
+            minuteHeight = fromDOM.clientHeight / 1440;
 
-        getDOMForDay(from);
-        getDOMForDay(to);
+        // Split sleeps that span across days
+        if ( from.getDate() !== to.getDate() )
+        {
+            var bar1  = document.createElement("div"),
+                bar2  = document.createElement("div"),
+                from1 = new Date(from),
+                to1   = new Date(from),
+                from2 = new Date(to),
+                to2   = new Date(to);
 
-        var bar = document.createElement("div");
-        bar.className = "day";
+            to1.setHours(23, 59);
+            from2.setHours(0, 0);
+
+            // Split day bar into minute segments
+            var height1 = 1440 - getMinutesOfDay(from1),
+                height2 = getMinutesOfDay(to2);
+
+            bar1.className = bar2.className = "bar broken";
+            bar1.from      = bar2.from      = from;
+            bar1.to        = bar2.to        = to;
+
+            bar1.style.top    = "0px";
+            bar1.style.height = (height1 * minuteHeight) + "px";
+            bar2.style.bottom = "0px";
+            bar2.style.height = (height2 * minuteHeight) + "px";
+
+            fromDOM.appendChild(bar1);
+            toDOM.appendChild(bar2);
+        }
+        else
+        {
+            // Split day bar into minute segments
+            var bar    = document.createElement("div"),
+                height = getMinutesOfDay(to) - getMinutesOfDay(from);
+
+            bar.className = "bar";
+            bar.from      = from;
+            bar.to        = to;
+
+            bar.style.bottom = (getMinutesOfDay(from) * minuteHeight) + "px";
+            bar.style.height = (height * minuteHeight) + "px";
+        }
+
+        fromDOM.appendChild(bar);
     }
 
     console.log(DOM.dayBars);
@@ -95,6 +137,7 @@ function generateDOM()
 
 /**
  * @param {Date} date
+ * @returns {HTMLElement}
  */
 function getDOMForDay(date)
 {
@@ -110,13 +153,13 @@ function getDOMForDay(date)
 
     if ( !DOM.dayBars[year][month][day] )
     {
-        var bar = DOM.dayBars[year][month][day] = document.createElement("div");
-        bar.className = "day";
-        bar.dataset.year  = year;
-        bar.dataset.month = month;
-        bar.dataset.day   = day;
+        var dayBar = DOM.dayBars[year][month][day] = document.createElement("div");
+        dayBar.className     = "day";
+        dayBar.dataset.year  = year;
+        dayBar.dataset.month = month;
+        dayBar.dataset.day   = day;
 
-        DOM.sleepChart.appendChild(bar);
+        DOM.sleepChart.appendChild(dayBar);
     }
 
     return DOM.dayBars[year][month][day];
@@ -174,6 +217,18 @@ function parseDate(date)
         matches[3], matches[2], matches[1],
         matches[4], matches[5], matches[6]
     );
+}
+
+/*
+ * Utility
+ */
+
+/**
+ * @param {Date} date
+ */
+function getMinutesOfDay(date)
+{
+    return (date.getHours() * 60) + date.getMinutes();
 }
 
 /*
