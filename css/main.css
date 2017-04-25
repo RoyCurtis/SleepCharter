@@ -1,0 +1,50 @@
+/**
+ * Sleep charter, main stylesheet
+ * Roy Curtis, MIT license, 2017
+ */
+
+/* CSS reset */
+
+html, body
+{
+    background: slategray;
+    width:  100%;
+    height: 100%;
+}
+
+*
+{
+    box-sizing: border-box;
+    margin:     0;
+    padding:    0;
+}
+
+/* Chart */
+
+.chart
+{
+    background: lightslategray;
+    display: flex;
+    flex-flow: row;
+    padding:    1em;
+}
+
+.chart .day
+{
+    background: gainsboro;
+    height:     100%;
+    width:      1em;
+    position:   relative;
+}
+
+.chart .day:nth-child(even)
+{
+    background: ghostwhite;
+}
+
+.chart .day .bar
+{
+    width: 100%;
+    background: red;
+    position: relative;
+}
