@@ -38,7 +38,7 @@ function generateAlertBox()
     DOM.sleepChart.appendChild(alertBox);
 }
 
-function generateDayBars()
+function generateSleepBars()
 {
     for (var i = 0, len = STATE.entries.length; i < len; i++)
     {
@@ -51,6 +51,7 @@ function generateDayBars()
         // Split sleeps that span across days
         if ( from.getDate() !== to.getDate() )
         {
+            /** @type SleepBar */
             var bar1 = document.createElement("div"),
                 bar2 = document.createElement("div");
 

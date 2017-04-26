@@ -101,7 +101,7 @@ function processDOM()
 
     generateTimeAxis();
     generateAlertBox();
-    generateDayBars();
+    generateSleepBars();
 }
 
 function finalize()

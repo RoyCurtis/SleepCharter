@@ -38,6 +38,8 @@
  * @typedef {Element} SleepBar
  * @prop {Date} from Gets the start date and time of this sleep bar's event
  * @prop {Date} to Gets the end date and time of this sleep bar's event
+ * @prop {?boolean} isTopBar Whether this is a top bar, if this bar is split across days
+ * @prop {?SleepBar} pairedBar Gets the paired bar, if this bar is split across days
  */
 
 /**
