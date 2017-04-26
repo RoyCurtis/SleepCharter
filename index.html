@@ -12,13 +12,24 @@
 </head>
 
 <body>
-<div id="sleepChart" class="chart">
-
-</div>
+<!-- TODO: Semantic elements -->
+<div id="sleep-chart" class="chart"></div>
 </body>
 
 <scripts>
+  <!-- 3rd party fetch API polyfill -->
   <script type="application/javascript" src="js/vendor/fetch.js"></script>
+
+  <!-- Sleep charter scripts -->
+  <script type="application/javascript" src="js/data.js"></script>
+  <script type="application/javascript" src="js/dom.js"></script>
+  <script type="application/javascript" src="js/events.js"></script>
   <script type="application/javascript" src="js/main.js"></script>
+  <script type="application/javascript" src="js/util.js"></script>
+
+  <script type="application/javascript">
+    // Change these to use a different file or element
+    main("sleepData.csv", "#sleep-chart");
+  </script>
 </scripts>
 </html>
