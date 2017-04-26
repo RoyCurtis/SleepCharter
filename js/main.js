@@ -97,6 +97,7 @@ function processDOM()
 {
     DOM.sleepChart.onmouseover = onSleepChartMouseOver;
     DOM.sleepChart.onwheel     = onSleepChartMouseWheel;
+    DOM.sleepChart.onclick     = onSleepChartClick;
     document.body.onresize     = onSleepChartResize;
 
     generateTimeAxis();
