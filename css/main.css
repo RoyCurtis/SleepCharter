@@ -43,7 +43,7 @@ html, body
     opacity:        0.25;
     pointer-events: none;
     position:       fixed;
-    z-index:        999;
+    z-index:        500;
 }
 
 .chart > .axis > .hour
@@ -54,6 +54,23 @@ html, body
     font-size:   0.75em;
     font-weight: bold;
 }
+
+.chart > .alert
+{
+    top:   0;
+    left:  25%;
+    width: 50%;
+
+    background: black;
+    color:      white;
+    font-size:  1em;
+    padding:    0.5em;
+    position:   fixed;
+    text-align: center;
+    z-index:    999;
+}
+
+.chart > .alert.hidden { display: none; }
 
 .chart > .year
 {
@@ -66,7 +83,7 @@ html, body
     font-size:   4em;
     line-height: 0.7em;
     position:    absolute;
-    z-index:     999;
+    z-index:     500;
 }
 
 .chart > .year > .month
@@ -80,7 +97,7 @@ html, body
     font-size:      2em;
     padding-bottom: 1.6em;
     position:       absolute;
-    z-index:        999;
+    z-index:        500;
 }
 
 .chart > .year > .month > .day > label
@@ -91,20 +108,20 @@ html, body
     font-size:  0.6em;
     position:   absolute;
     text-align: center;
-    z-index:    999;
+    z-index:    500;
 }
 
 .chart > .year > label,
 .chart > .year > .month > label,
 .chart > .year > .month > .day > label
 {
-    color: #808080;
+    color: #404040;
 }
 
 .chart > .year > .month:nth-child(odd) > label,
 .chart > .year > .month:nth-child(odd) > .day > label
 {
-    color: #B3B3B3;
+    color: #808080;
 }
 
 .chart > .year > .month > .day

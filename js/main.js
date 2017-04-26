@@ -27,6 +27,8 @@ var DOM = {
     sleepChart: null,
     /** @type HTMLElement */
     timeAxis:   null,
+    /** @type HTMLElement */
+    alertBox:   null,
     dayBars:    {},
     sleepBars:  []
 };
@@ -92,7 +94,13 @@ function main()
         if (e.ctrlKey || e.shiftKey)
             return;
 
-        window.scrollBy(e.deltaY, 0);
+        // Chrome uses deltaMode 0 (pixels)
+        // Firefox uses deltaMode 1 (lines)
+        var delta = e.deltaMode === 0
+            ? e.deltaY
+            : e.deltaY * 33;
+
+        window.scrollBy(delta, 0);
         e.preventDefault();
     };
 
@@ -149,6 +157,13 @@ function generateDOM()
     }
 
     DOM.sleepChart.appendChild(timeAxis);
+
+    var alertBox = DOM.alertBox = document.createElement("div");
+
+    alertBox.className = "alert";
+    alertBox.classList.add("hidden");
+
+    DOM.sleepChart.appendChild(alertBox);
 
     for (var i = 0, len = STATE.entries.length; i < len; i++)
     {
@@ -264,7 +279,7 @@ function rescaleSleeps()
 {
     if (STATE.rescaleIdx >= DOM.sleepBars.length)
     {
-        console.log("Rescale done!");
+        DOM.alertBox.classList.add("hidden")
         STATE.rescaling = false;
         return;
     }
@@ -275,7 +290,7 @@ function rescaleSleeps()
     }
 
     if (STATE.rescaleIdx === 0)
-        console.log("Beginning rescale...");
+        DOM.alertBox.classList.remove("hidden");
 
     var bar          = DOM.sleepBars[STATE.rescaleIdx],
         from         = bar.from,
@@ -305,6 +320,10 @@ function rescaleSleeps()
         bar.style.height = ( (height * minuteHeight) | 0 ) + "px";
     }
 
+    DOM.alertBox.innerHTML = "Redrawing graph ("
+        + STATE.rescaleIdx
+        + "/" + DOM.sleepBars.length
+        + ")...";
     STATE.rescaleIdx++;
 }
 
