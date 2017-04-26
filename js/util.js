@@ -21,14 +21,16 @@ function getMinutesOfDay(date)
  */
 function getSleepBarMessage(sleep)
 {
-    var from   = sleep.from,
-        to     = sleep.to,
-        length = ( to.getTime() - from.getTime() ) / 1000 / 60,
-        msg    = "";
+    var from    = sleep.from,
+        to      = sleep.to,
+        minutes = ( to.getTime() - from.getTime() ) / 1000 / 60,
+        hours   = (minutes / 60) | 0,
+        msg     = "";
 
     msg += "From: " + sleep.from + "\n";
     msg += "To: " + sleep.to + "\n";
-    msg += "Length: " + length + " minutes\n";
+    msg += "Length: " + hours + " hours, ";
+    msg += ( minutes - (hours * 60) ) + " minutes";
 
     return msg;
 }
