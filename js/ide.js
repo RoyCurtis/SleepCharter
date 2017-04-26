@@ -11,7 +11,7 @@
  */
 
 /**
- * Hierarchical container for the day bars that make up the graph. Structured as:
+ * Hierarchical container for the day bars that make up the chart. Structured as:
  *
  * * Integer index to a year's DIV element (e.g. `dayBars[2017]`)
  * * Integer index to a month's DIV element (e.g. `dayBars[2017][2]`)

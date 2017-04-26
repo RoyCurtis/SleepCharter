@@ -67,9 +67,8 @@ function main(file, selector)
     DOM.sleepChart = document.querySelector(selector);
 
     if (DOM.sleepChart === null)
-        throw new Error("No element found with given selector", selector);
+        throw new Error("No element found with given selector: " + selector);
 
-    // TODO: Use alert box to represent loading
     fetch(file)
         .then(processResponse)
         .then(processData)
@@ -81,7 +80,7 @@ function main(file, selector)
 function processResponse(response)
 {
     if (!response.ok)
-        throw new Error("Response is not OK", response);
+        throw new Error("Response is not OK: " + response);
     else
         return response.text();
 }
@@ -100,8 +99,12 @@ function processDOM()
     DOM.sleepChart.onclick     = onSleepChartClick;
     document.body.onresize     = onSleepChartResize;
 
-    generateTimeAxis();
+    // Remove default error message
+    DOM.sleepChart.innerHTML = "";
+    DOM.sleepChart.classList.remove("nojs");
+
     generateAlertBox();
+    generateTimeAxis();
     generateSleepBars();
 }
 
@@ -111,8 +114,14 @@ function finalize()
     onSleepChartResize();
 }
 
+/** @param {Error} error */
 function processError(error)
 {
-    // TODO: use alert box for this
+    if (DOM.alertBox)
+    {
+        DOM.alertBox.classList.remove("hidden");
+        DOM.alertBox.innerHTML = "Error: " + error.message;
+    }
+
     console.error(error);
 }

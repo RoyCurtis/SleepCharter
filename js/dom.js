@@ -191,7 +191,7 @@ function rescaleSleeps()
         bar.style.height = ( (height * minuteHeight) | 0 ) + "px";
     }
 
-    DOM.alertBox.innerHTML = "Redrawing graph ("
+    DOM.alertBox.innerHTML = "Redrawing chart ("
         + STATE.rescaleIdx
         + "/" + DOM.sleepBars.length
         + ")...";
