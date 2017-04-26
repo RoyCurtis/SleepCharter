@@ -140,6 +140,9 @@ function getDOMForDay(date)
  * how to properly use CSS for this task. This calls itself using requestAnimationFrame
  * and only handles one sleep event per frame. This prevents locking up the page.
  *
+ * It turns out, spreading this across rAF frames was very necessary for Firefox. Flexbox
+ * seems to be extremely slow in Firefox (TODO)
+ *
  * Note: Uses of "| 0" forces calculation into integer (rounded down)
  */
 function rescaleSleeps()
