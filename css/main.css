@@ -3,8 +3,7 @@
  * Roy Curtis, MIT license, 2017
  */
 
-/* CSS reset */
-
+/*<editor-fold desc="CSS reset">*/
 html, body
 {
     width:  100%;
@@ -22,9 +21,9 @@ html, body
     margin:     0;
     padding:    0;
 }
+/*</editor-fold>*/
 
-/* Chart */
-
+/*<editor-fold desc="Chart">*/
 sleep-chart
 {
     width: 100%;
@@ -45,9 +44,9 @@ sleep-chart.nojs
     background: -webkit-linear-gradient(-45deg, rgba(255,255,255,0) 0%,rgba(255,226,226,1) 100%); /* Chrome10-25,Safari5.1-6 */
     background: linear-gradient(135deg, rgba(255,255,255,0) 0%,rgba(255,226,226,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
+/*</editor-fold>*/
 
-/* Chart - left side hour axis */
-
+/*<editor-fold desc="Chart - left side hour axis">*/
 sleep-chart > .axis
 {
     top: 1.25em;
@@ -72,9 +71,9 @@ sleep-chart > .axis > .hour
 }
 
 sleep-chart > .axis > .hour:first-child { border-bottom: none; }
+/*</editor-fold>*/
 
-/* Chart - top box */
-
+/*<editor-fold desc="Chart - alert box">*/
 sleep-chart > .alert
 {
     top:   0;
@@ -91,9 +90,9 @@ sleep-chart > .alert
 }
 
 sleep-chart > .alert.hidden { display: none; }
+/*</editor-fold>*/
 
-/* Chart - date labels */
-
+/*<editor-fold desc="Chart - Date labels">*/
 sleep-chart > year > label,
 sleep-chart > year > month > label,
 sleep-chart > year > month > day > label
@@ -106,9 +105,9 @@ sleep-chart > year > month:nth-child(odd) > day > label
 {
     color: #808080;
 }
+/*</editor-fold>*/
 
-/* Chart - years */
-
+/*<editor-fold desc="Chart - Years">*/
 sleep-chart > year
 {
     display: flex;
@@ -123,7 +122,9 @@ sleep-chart > year > label
     line-height: 0.7em;
     z-index:     500;
 }
+/*</editor-fold>*/
 
+/*<editor-fold desc="Chart - Months">*/
 sleep-chart > year > month
 {
     display: flex;
@@ -138,7 +139,9 @@ sleep-chart > year > month > label
     padding-bottom: 1.6em;
     z-index:        500;
 }
+/*</editor-fold>*/
 
+/*<editor-fold desc="Chart - Days">*/
 sleep-chart > year > month > day
 {
     width: 1em;
@@ -164,10 +167,12 @@ sleep-chart > year > month > day > label
     text-align: center;
     z-index:    500;
 }
+/*</editor-fold>*/
 
+/*<editor-fold desc="Chart - Sleep bars">*/
 sleep-chart > year > month > day > sleep
 {
-    width:      100%;
+    width: 100%;
 
     background: #6F8A91;
     position:   absolute;
@@ -177,3 +182,4 @@ sleep-chart > year > month > day > sleep.selected
 {
     background: #9DC3CC;
 }
+/*</editor-fold>*/
