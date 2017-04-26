@@ -13,6 +13,7 @@ html, body
     background:  #EEEEEE;
     display:     flex;
     font-family: sans-serif;
+    overflow:    hidden;
 }
 
 *
@@ -26,14 +27,16 @@ html, body
 
 .chart
 {
+    width: 100%;
+
     display:     flex;
     flex-shrink: 0;
     padding:     1em;
+    overflow:    auto;
 }
 
 .chart > .axis
 {
-    width:  3em;
     bottom: 8.25em;
     top:    1.25em;
 
@@ -48,18 +51,21 @@ html, body
 
 .chart > .axis > .hour
 {
-    align-items: center;
-    display:     flex;
-    flex-grow:   1;
-    font-size:   0.75em;
-    font-weight: bold;
+    align-items:   center;
+    border-bottom: 1px solid rgba(0,0,0,0.5);
+    display:       flex;
+    flex-grow:     1;
+    font-size:     0.75em;
+    font-weight:   bold;
 }
+
+.chart > .axis > .hour:first-child { border-bottom: none; }
 
 .chart > .alert
 {
     top:   0;
-    left:  25%;
-    width: 50%;
+    left:  25vw;
+    width: 50vw;
 
     background: black;
     color:      white;
@@ -79,10 +85,11 @@ html, body
 
 .chart > .year > label
 {
+    width: 0;
+    
     align-self:  flex-end;
     font-size:   4em;
     line-height: 0.7em;
-    position:    absolute;
     z-index:     500;
 }
 
@@ -93,10 +100,11 @@ html, body
 
 .chart > .year > .month > label
 {
+    width: 0;
+
     align-self:     flex-end;
     font-size:      2em;
     padding-bottom: 1.6em;
-    position:       absolute;
     z-index:        500;
 }
 

@@ -89,7 +89,7 @@ function main()
         }
     };
 
-    document.onwheel = function(e)
+    DOM.sleepChart.onwheel = function(e)
     {
         if (e.ctrlKey || e.shiftKey)
             return;
@@ -100,7 +100,7 @@ function main()
             ? e.deltaY
             : e.deltaY * 33;
 
-        window.scrollBy(delta, 0);
+        DOM.sleepChart.scrollLeft += delta;
         e.preventDefault();
     };
 
