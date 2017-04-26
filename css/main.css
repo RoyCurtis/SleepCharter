@@ -79,7 +79,7 @@ html, body
     left:  25vw;
     width: 50vw;
 
-    background: black;
+    background: rgba(0, 0, 0, 0.75);
     color:      white;
     font-size:  1em;
     padding:    0.5em;
@@ -89,6 +89,19 @@ html, body
 }
 
 .chart > .alert.hidden { display: none; }
+
+.chart > .year > label,
+.chart > .year > .month > label,
+.chart > .year > .month > .day > label
+{
+    color: #404040;
+}
+
+.chart > .year > .month:nth-child(odd) > label,
+.chart > .year > .month:nth-child(odd) > .day > label
+{
+    color: #808080;
+}
 
 .chart > .year
 {
@@ -120,30 +133,6 @@ html, body
     z-index:        500;
 }
 
-.chart > .year > .month > .day > label
-{
-    width: 100%;
-
-    bottom:     -20px;
-    font-size:  0.6em;
-    position:   absolute;
-    text-align: center;
-    z-index:    500;
-}
-
-.chart > .year > label,
-.chart > .year > .month > label,
-.chart > .year > .month > .day > label
-{
-    color: #404040;
-}
-
-.chart > .year > .month:nth-child(odd) > label,
-.chart > .year > .month:nth-child(odd) > .day > label
-{
-    color: #808080;
-}
-
 .chart > .year > .month > .day
 {
     width: 1em;
@@ -157,6 +146,17 @@ html, body
 
 .chart > .year > .month > .day:hover {
     background: #FAFAFA;
+}
+
+.chart > .year > .month > .day > label
+{
+    width: 100%;
+
+    bottom:     -20px;
+    font-size:  0.6em;
+    position:   absolute;
+    text-align: center;
+    z-index:    500;
 }
 
 .chart > .year > .month > .day > .bar

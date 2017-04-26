@@ -1,0 +1,27 @@
+/**
+ * Sleep charter, responsive (< 550px height)
+ * Roy Curtis, MIT license, 2017
+ */
+
+.chart > .axis > .hour
+{
+    border:    none;
+    font-size: 0.5em;
+}
+
+.chart > .year > label
+{
+    font-size:   1.25em;
+    line-height: 0.7em;
+}
+
+.chart > .year > .month > label
+{
+    font-size:      0.75em;
+    padding-bottom: 1.6em;
+}
+
+.chart > .year > .month > .day
+{
+    margin-bottom: 3.5em;
+}

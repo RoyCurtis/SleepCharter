@@ -1,0 +1,11 @@
+/**
+ * Sleep charter, responsive (< 500px width)
+ * Roy Curtis, MIT license, 2017
+ */
+
+.chart > .alert
+{
+    top:   0;
+    left:  0;
+    width: 100vw;
+}
