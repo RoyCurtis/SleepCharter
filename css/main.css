@@ -144,6 +144,10 @@ html, body
     border-bottom: 0.25em solid #CCCCCC;
 }
 
+.chart > .year > .month > .day:hover {
+    background: #FAFAFA;
+}
+
 .chart > .year > .month > .day > .bar
 {
     width:      100%;
