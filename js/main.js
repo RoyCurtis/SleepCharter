@@ -64,7 +64,8 @@ function main()
             if (STATE.selected.pairedBar)
                 STATE.selected.pairedBar.classList.remove("selected");
 
-            STATE.selected = null;
+            STATE.selected.title = "";
+            STATE.selected       = null;
         }
 
         // If started hovering over a(nother) bar
@@ -73,10 +74,16 @@ function main()
             STATE.selected = selected;
             selected.classList.add("selected");
 
+            var from   = STATE.selected.from,
+                to     = STATE.selected.to,
+                length = ( to.getTime() - from.getTime() ) / 1000 / 60;
+
+            STATE.selected.title  = "From: " + STATE.selected.from + "\n";
+            STATE.selected.title += "To: " + STATE.selected.to + "\n";
+            STATE.selected.title += "Length: " + length + " minutes\n";
+
             if (STATE.selected.pairedBar)
                 STATE.selected.pairedBar.classList.add("selected");
-
-            console.log(selected.from, selected.to);
         }
     };
 
