@@ -49,7 +49,7 @@ var STATE = {
 
     /** Whether or not a rescale is in progress */
     rescaling: false,
-    
+
     /**
      * Currently selected (e.g. hovered over) sleep bar
      *
@@ -64,65 +64,11 @@ var STATE = {
 
 function main()
 {
-    DOM.sleepChart = document.querySelector("#sleepChart");
-
-    DOM.sleepChart.onmouseover = function (evt)
-    {
-        /** @type HTMLElement */
-        var selected = evt.target;
-
-        // Do nothing if already hovering over same bar
-        if (STATE.selected === selected)
-            return;
-
-        // Remove selection class from previously selected bar
-        if (STATE.selected !== null)
-        {
-            STATE.selected.classList.remove("selected");
-
-            if (STATE.selected.pairedBar)
-                STATE.selected.pairedBar.classList.remove("selected");
-
-            STATE.selected.title = "";
-            STATE.selected       = null;
-        }
-
-        // If started hovering over a(nother) bar
-        if ( selected.classList.contains("bar") )
-        {
-            STATE.selected = selected;
-            selected.classList.add("selected");
-
-            var from   = STATE.selected.from,
-                to     = STATE.selected.to,
-                length = ( to.getTime() - from.getTime() ) / 1000 / 60;
-
-            STATE.selected.title  = "From: " + STATE.selected.from + "\n";
-            STATE.selected.title += "To: " + STATE.selected.to + "\n";
-            STATE.selected.title += "Length: " + length + " minutes\n";
-
-            if (STATE.selected.pairedBar)
-                STATE.selected.pairedBar.classList.add("selected");
-        }
-    };
-
-    DOM.sleepChart.onwheel = function(e)
-    {
-        if (e.ctrlKey || e.shiftKey)
-            return;
-
-        // Chrome uses deltaMode 0 (pixels)
-        // Firefox uses deltaMode 1 (lines)
-        DOM.sleepChart.scrollLeft += e.deltaMode === 0
-            ? e.deltaY
-            : e.deltaY * 33;
-        e.preventDefault();
-    };
-
+    // TODO: Use alert box to represent loading
     fetch('sleepData.csv')
         .then(processResponse)
         .then(processData)
-        .then(generateDOM)
+        .then(processDOM)
         .then(finalize)
         .catch(processError);
 }
@@ -138,20 +84,110 @@ function processResponse(response)
 function processData(data)
 {
     STATE.entries = parseCSV(data);
-
-    // Ensure entries are sorted by earliest from-time to latest from-time
-    STATE.entries.sort( function(a, b)
-    {
-        var from = a[0].getTime(),
-            to   = b[0].getTime();
-
-        if      (from > to) return 1;
-        else if (from < to) return -1;
-        else                return 0;
-    });
+    STATE.entries.sort(sortByFromTimes);
 }
 
-function generateDOM()
+function processDOM()
+{
+    DOM.sleepChart = document.querySelector("#sleepChart");
+
+    DOM.sleepChart.onmouseover = onSleepChartMouseOver;
+    DOM.sleepChart.onwheel     = onSleepChartMouseWheel;
+    document.body.onresize     = onSleepChartResize;
+
+    generateTimeAxis();
+    generateAlertBox();
+    generateDayBars();
+}
+
+function finalize()
+{
+    console.log("Logging STATE and DOM globals. . .", STATE, DOM);
+    onSleepChartResize();
+}
+
+function processError(error)
+{
+    // TODO: use alert box for this
+    console.error(error);
+}
+
+/*
+ * Event handling
+ */
+
+/** @param {MouseEvent} evt */
+function onSleepChartMouseOver(evt)
+{
+    /** @type HTMLElement|EventTarget */
+    var selected = evt.target;
+
+    // Do nothing if already hovering over same bar
+    if (STATE.selected === selected)
+        return;
+
+    // Remove selection class from previously selected bar
+    if (STATE.selected !== null)
+    {
+        STATE.selected.classList.remove("selected");
+
+        if (STATE.selected.pairedBar)
+            STATE.selected.pairedBar.classList.remove("selected");
+
+        STATE.selected.title = "";
+        STATE.selected       = null;
+    }
+
+    // If started hovering over a(nother) bar
+    if ( selected.classList.contains("bar") )
+    {
+        STATE.selected = selected;
+        selected.classList.add("selected");
+
+        var from   = STATE.selected.from,
+            to     = STATE.selected.to,
+            length = ( to.getTime() - from.getTime() ) / 1000 / 60;
+
+        STATE.selected.title  = "From: " + STATE.selected.from + "\n";
+        STATE.selected.title += "To: " + STATE.selected.to + "\n";
+        STATE.selected.title += "Length: " + length + " minutes\n";
+
+        if (STATE.selected.pairedBar)
+            STATE.selected.pairedBar.classList.add("selected");
+    }
+}
+
+/** @param {WheelEvent} evt */
+function onSleepChartMouseWheel(evt)
+{
+    if (evt.ctrlKey || evt.shiftKey)
+        return;
+
+    // Chrome uses deltaMode 0 (pixels)
+    // Firefox uses deltaMode 1 (lines)
+    DOM.sleepChart.scrollLeft += evt.deltaMode === 0
+        ? evt.deltaY
+        : evt.deltaY * 33;
+    evt.preventDefault();
+}
+
+function onSleepChartResize()
+{
+    // This is necessary, because making fixed elements work with em/vh heights whilst
+    // accounting for scrollbar offset, is just too difficult...
+    DOM.timeAxis.style.height = DOM.sleepBars[0].parentNode.clientHeight + "px";
+    STATE.rescaleIdx = 0;
+
+    if (!STATE.rescaling)
+        rescaleSleeps();
+}
+
+/*
+ * DOM handling
+ */
+
+/** Generates the left-side axis of hours */
+function generateTimeAxis()
 {
     var timeAxis = DOM.timeAxis = document.createElement("div");
 
@@ -172,14 +208,25 @@ function generateDOM()
     }
 
     DOM.sleepChart.appendChild(timeAxis);
+}
 
+/**
+ * Generates the top-of-page alert box
+ *
+ * @return {HTMLElement}
+ */
+function generateAlertBox()
+{
     var alertBox = DOM.alertBox = document.createElement("div");
 
     alertBox.className = "alert";
     alertBox.classList.add("hidden");
 
     DOM.sleepChart.appendChild(alertBox);
+}
 
+function generateDayBars()
+{
     for (var i = 0, len = STATE.entries.length; i < len; i++)
     {
         var sleep        = STATE.entries[i],
@@ -220,33 +267,6 @@ function generateDOM()
         }
     }
 }
-
-function finalize()
-{
-    console.log(STATE, DOM);
-
-    document.body.onresize = function()
-    {
-        // This is necessary, because making fixed elements work with em/vh heights whilst
-        // accounting for scrollbar offset, is just too difficult...
-        DOM.timeAxis.style.height = DOM.sleepBars[0].parentNode.clientHeight + "px";
-        STATE.rescaleIdx = 0;
-
-        if (!STATE.rescaling)
-            rescaleSleeps();
-    };
-
-    document.body.onresize();
-}
-
-function processError(error)
-{
-    console.error(error);
-}
-
-/*
- * DOM handling
- */
 
 /**
  * @param {Date} date
@@ -354,7 +374,11 @@ function rescaleSleeps()
  * Data parsing
  */
 
-/** @param {string} csv */
+/**
+ * Parses the given raw CSV data into an array of {@link SleepEvent}s
+ *
+ * @param {string} csv
+ */
 function parseCSV(csv)
 {
     var lines  = csv.split('\n');
@@ -409,6 +433,23 @@ function parseDate(date)
 function getMinutesOfDay(date)
 {
     return (date.getHours() * 60) + date.getMinutes();
+}
+
+/**
+ * Sorts sleep events by earliest from-time to latest from-time
+ *
+ * @param {SleepEvent} a
+ * @param {SleepEvent} b
+ * @return {number}
+ */
+function sortByFromTimes(a, b)
+{
+    var from = a[0].getTime(),
+        to   = b[0].getTime();
+
+    if      (from > to) return 1;
+    else if (from < to) return -1;
+    else                return 0;
 }
 
 /*

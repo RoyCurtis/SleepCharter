@@ -29,7 +29,7 @@
 /**
  * A DIV element that represents a sleep event on the chart
  *
- * @typedef {HTMLDivElement} SleepBar
+ * @typedef {Element} SleepBar
  * @prop {Date} from Gets the start date and time of this sleep bar's event
  * @prop {Date} to Gets the end date and time of this sleep bar's event
  */
