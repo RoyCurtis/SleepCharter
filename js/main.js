@@ -19,9 +19,9 @@
  * 6: ss (second)
  * @type {RegExp}
  */
-var GOOGLE_DATETIME_REGEX =
-    /(\d{2}).(\d{2}).(\d{4}) (\d{2}):(\d{2}):(\d{2})/;
+var GOOGLE_DATETIME_REGEX = /(\d{2}).(\d{2}).(\d{4}) (\d{2}):(\d{2}):(\d{2})/;
 
+/** Global container for DOM element references */
 var DOM = {
     /** @type HTMLElement */
     sleepChart: null,
@@ -29,16 +29,33 @@ var DOM = {
     timeAxis:   null,
     /** @type HTMLElement */
     alertBox:   null,
+    /** @type DayBars */
     dayBars:    {},
+    /** @type SleepBar[] */
     sleepBars:  []
 };
 
+/** Global container for program state */
 var STATE = {
-    entries:    [],
-    /** @type HTMLElement */
-    selected:   null,
+    /**
+     * Array of sleep events, processed from an external CSV file
+     *
+     * @type Array.<SleepEvent>
+     */
+    entries: [],
+
+    /** Current progress of chart's rescaling process */
     rescaleIdx: 0,
-    rescaling:  false
+
+    /** Whether or not a rescale is in progress */
+    rescaling: false,
+    
+    /**
+     * Currently selected (e.g. hovered over) sleep bar
+     *
+     * @type SleepBar
+     */
+    selected: null
 };
 
 /*
@@ -191,6 +208,7 @@ function generateDOM()
         else
         {
             // Split day bar into minute segments
+            /** @type SleepBar */
             var bar = document.createElement("div");
 
             bar.className = "bar";
@@ -243,6 +261,7 @@ function getDOMForDay(date)
     if ( !DOM.dayBars[year] )
     {
         var yearDiv = DOM.dayBars[year] = document.createElement("div");
+
         yearDiv.className    = "year";
         yearDiv.dataset.year = year;
         yearDiv.innerHTML    = "<label>" + year + "</label>";
@@ -254,6 +273,7 @@ function getDOMForDay(date)
     {
         var monthDiv  = DOM.dayBars[year][month] = document.createElement("div"),
             monthText = date.toLocaleString("en-us", {month: 'long'});
+
         monthDiv.className     = "month";
         monthDiv.dataset.month = month;
         monthDiv.innerHTML     = "<label>" + monthText + "</label>";
@@ -264,6 +284,7 @@ function getDOMForDay(date)
     if ( !DOM.dayBars[year][month][day] )
     {
         var dayBar = DOM.dayBars[year][month][day] = document.createElement("div");
+
         dayBar.className   = "day";
         dayBar.dataset.day = day;
         dayBar.innerHTML   = "<label>" + day + "</label>";
