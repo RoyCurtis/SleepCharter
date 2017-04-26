@@ -96,11 +96,9 @@ function main()
 
         // Chrome uses deltaMode 0 (pixels)
         // Firefox uses deltaMode 1 (lines)
-        var delta = e.deltaMode === 0
+        DOM.sleepChart.scrollLeft += e.deltaMode === 0
             ? e.deltaY
             : e.deltaY * 33;
-
-        DOM.sleepChart.scrollLeft += delta;
         e.preventDefault();
     };
 
@@ -208,15 +206,19 @@ function generateDOM()
 function finalize()
 {
     console.log(STATE, DOM);
-    rescaleSleeps();
 
     document.body.onresize = function()
     {
+        // This is necessary, because making fixed elements work with em/vh heights whilst
+        // accounting for scrollbar offset, is just too difficult...
+        DOM.timeAxis.style.height = DOM.sleepBars[0].parentNode.clientHeight + "px";
         STATE.rescaleIdx = 0;
 
         if (!STATE.rescaling)
             rescaleSleeps();
-    }
+    };
+
+    document.body.onresize();
 }
 
 function processError(error)
