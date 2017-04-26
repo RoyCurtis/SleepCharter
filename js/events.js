@@ -31,7 +31,7 @@ function onSleepChartMouseOver(evt)
     }
 
     // If started hovering over a(nother) bar
-    if ( selected.classList.contains("bar") )
+    if (selected.tagName === "SLEEP")
     {
         STATE.selected       = selected;
         STATE.selected.title = getSleepBarMessage(selected);
@@ -62,7 +62,7 @@ function onSleepChartClick(evt)
     var selected = evt.target;
 
     // Handle only sleep bars
-    if ( !selected.classList.contains("bar") )
+    if (selected.tagName !== "SLEEP")
         return;
 
     window.alert( getSleepBarMessage(selected) );

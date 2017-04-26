@@ -14,10 +14,9 @@
 </head>
 
 <body>
-<!-- TODO: Semantic elements -->
-<div id="sleep-chart" class="chart nojs">
+<sleep-chart class="nojs">
   Either Javascript is disabled, or a fatal error occured (F12 to open console)
-</div>
+</sleep-chart>
 </body>
 
 <scripts>
@@ -33,7 +32,7 @@
 
   <script type="application/javascript">
     // Change these to use a different file or element
-    main("sleepData.csv", "#sleep-chart");
+    main("sleepData.csv", "sleep-chart");
   </script>
 </scripts>
 </html>

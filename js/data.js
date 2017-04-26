@@ -10,7 +10,7 @@
  */
 function parseCSV(csv)
 {
-    var lines  = csv.split('\n');
+    var lines = csv.split('\n');
 
     // Remove CSV header
     lines.shift();

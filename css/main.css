@@ -25,7 +25,7 @@ html, body
 
 /* Chart */
 
-.chart
+sleep-chart
 {
     width: 100%;
 
@@ -35,7 +35,7 @@ html, body
     overflow:    auto;
 }
 
-.chart.nojs
+sleep-chart.nojs
 {
     font-size: xx-large;
     color:     #888888;
@@ -46,7 +46,9 @@ html, body
     background: linear-gradient(135deg, rgba(255,255,255,0) 0%,rgba(255,226,226,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 
-.chart > .axis
+/* Chart - left side hour axis */
+
+sleep-chart > .axis
 {
     top: 1.25em;
 
@@ -59,7 +61,7 @@ html, body
     z-index:        500;
 }
 
-.chart > .axis > .hour
+sleep-chart > .axis > .hour
 {
     align-items:   center;
     border-bottom: 1px solid rgba(0,0,0,0.5);
@@ -69,9 +71,11 @@ html, body
     font-weight:   bold;
 }
 
-.chart > .axis > .hour:first-child { border-bottom: none; }
+sleep-chart > .axis > .hour:first-child { border-bottom: none; }
 
-.chart > .alert
+/* Chart - top box */
+
+sleep-chart > .alert
 {
     top:   0;
     left:  25vw;
@@ -86,27 +90,31 @@ html, body
     z-index:    999;
 }
 
-.chart > .alert.hidden { display: none; }
+sleep-chart > .alert.hidden { display: none; }
 
-.chart > .year > label,
-.chart > .year > .month > label,
-.chart > .year > .month > .day > label
+/* Chart - date labels */
+
+sleep-chart > year > label,
+sleep-chart > year > month > label,
+sleep-chart > year > month > day > label
 {
     color: #404040;
 }
 
-.chart > .year > .month:nth-child(odd) > label,
-.chart > .year > .month:nth-child(odd) > .day > label
+sleep-chart > year > month:nth-child(odd) > label,
+sleep-chart > year > month:nth-child(odd) > day > label
 {
     color: #808080;
 }
 
-.chart > .year
+/* Chart - years */
+
+sleep-chart > year
 {
     display: flex;
 }
 
-.chart > .year > label
+sleep-chart > year > label
 {
     width: 0;
     
@@ -116,12 +124,12 @@ html, body
     z-index:     500;
 }
 
-.chart > .year > .month
+sleep-chart > year > month
 {
     display: flex;
 }
 
-.chart > .year > .month > label
+sleep-chart > year > month > label
 {
     width: 0;
 
@@ -131,7 +139,7 @@ html, body
     z-index:        500;
 }
 
-.chart > .year > .month > .day
+sleep-chart > year > month > day
 {
     width: 1em;
 
@@ -142,11 +150,11 @@ html, body
     border-bottom: 0.25em solid #CCCCCC;
 }
 
-.chart > .year > .month > .day:hover {
+sleep-chart > year > month > day:hover {
     background: #FAFAFA;
 }
 
-.chart > .year > .month > .day > label
+sleep-chart > year > month > day > label
 {
     width: 100%;
 
@@ -157,7 +165,7 @@ html, body
     z-index:    500;
 }
 
-.chart > .year > .month > .day > .bar
+sleep-chart > year > month > day > sleep
 {
     width:      100%;
 
@@ -165,7 +173,7 @@ html, body
     position:   absolute;
 }
 
-.chart > .year > .month > .day > .bar.selected
+sleep-chart > year > month > day > sleep.selected
 {
     background: #9DC3CC;
 }

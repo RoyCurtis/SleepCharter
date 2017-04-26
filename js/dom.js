@@ -42,20 +42,20 @@ function generateSleepBars()
 {
     for (var i = 0, len = STATE.entries.length; i < len; i++)
     {
-        var sleep        = STATE.entries[i],
-            from         = sleep[0],
-            to           = sleep[1],
-            fromDOM      = getDOMForDay(from),
-            toDOM        = getDOMForDay(to);
+        var sleep   = STATE.entries[i],
+            from    = sleep[0],
+            to      = sleep[1],
+            fromDOM = getDOMForDay(from),
+            toDOM   = getDOMForDay(to);
 
         // Split sleeps that span across days
         if ( from.getDate() !== to.getDate() )
         {
             /** @type SleepBar */
-            var bar1 = document.createElement("div"),
-                bar2 = document.createElement("div");
+            var bar1 = document.createElement("sleep"),
+                bar2 = document.createElement("sleep");
 
-            bar1.className = bar2.className = "bar broken";
+            bar1.className = bar2.className = "broken";
             bar1.from      = bar2.from      = from;
             bar1.to        = bar2.to        = to;
             bar1.isTopBar  = true;
@@ -71,11 +71,10 @@ function generateSleepBars()
         {
             // Split day bar into minute segments
             /** @type SleepBar */
-            var bar = document.createElement("div");
+            var bar = document.createElement("sleep");
 
-            bar.className = "bar";
-            bar.from      = from;
-            bar.to        = to;
+            bar.from = from;
+            bar.to   = to;
 
             fromDOM.appendChild(bar);
             DOM.sleepBars.push(bar);
@@ -98,11 +97,9 @@ function getDOMForDay(date)
     // Generates object and DOM for missing year
     if ( !DOM.dayBars[year] )
     {
-        var yearDiv = DOM.dayBars[year] = document.createElement("div");
+        var yearDiv = DOM.dayBars[year] = document.createElement("year");
 
-        yearDiv.className    = "year";
-        yearDiv.dataset.year = year;
-        yearDiv.innerHTML    = "<label>" + year + "</label>";
+        yearDiv.innerHTML = "<label>" + year + "</label>";
 
         DOM.sleepChart.appendChild(yearDiv);
     }
@@ -110,12 +107,10 @@ function getDOMForDay(date)
     // Generates object and DOM for missing month
     if ( !DOM.dayBars[year][month] )
     {
-        var monthDiv  = DOM.dayBars[year][month] = document.createElement("div"),
+        var monthDiv  = DOM.dayBars[year][month] = document.createElement("month"),
             monthText = date.toLocaleString("en-us", {month: 'long'});
 
-        monthDiv.className     = "month";
-        monthDiv.dataset.month = month;
-        monthDiv.innerHTML     = "<label>" + monthText + "</label>";
+        monthDiv.innerHTML = "<label>" + monthText + "</label>";
 
         DOM.dayBars[year].appendChild(monthDiv);
     }
@@ -123,11 +118,9 @@ function getDOMForDay(date)
     // Generates object and DOM for missing day
     if ( !DOM.dayBars[year][month][day] )
     {
-        var dayBar = DOM.dayBars[year][month][day] = document.createElement("div");
+        var dayBar = DOM.dayBars[year][month][day] = document.createElement("day");
 
-        dayBar.className   = "day";
-        dayBar.dataset.day = day;
-        dayBar.innerHTML   = "<label>" + day + "</label>";
+        dayBar.innerHTML = "<label>" + day + "</label>";
 
         DOM.dayBars[year][month].appendChild(dayBar);
     }
@@ -141,7 +134,7 @@ function getDOMForDay(date)
  * and only handles one sleep event per frame. This prevents locking up the page.
  *
  * It turns out, spreading this across rAF frames was very necessary for Firefox. Flexbox
- * seems to be extremely slow in Firefox (TODO)
+ * seems to be extremely slow in Firefox (TODO: Try to fix this)
  *
  * Note: Uses of "| 0" forces calculation into integer (rounded down)
  */

@@ -29,7 +29,7 @@
 /**
  * A DIV element held by a month container, that contains sleep bars.
  *
- * @typedef {HTMLDivElement} DayBars~Day
+ * @typedef {HTMLElement} DayBars~Day
  */
 
 /**
