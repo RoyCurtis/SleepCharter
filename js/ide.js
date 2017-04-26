@@ -23,7 +23,13 @@
 /**
  * A DIV element held by a year container, that contains day bars.
  *
- * @typedef {HTMLDivElement} DayBars~Month
+ * @typedef {Element.<number, DayBars~Day>} DayBars~Month
+ */
+
+/**
+ * A DIV element held by a month container, that contains sleep bars.
+ *
+ * @typedef {HTMLDivElement} DayBars~Day
  */
 
 /**

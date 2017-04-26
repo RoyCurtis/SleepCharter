@@ -4,6 +4,8 @@
  */
 
 /**
+ * Gets how many minutes have passed in the entire day, of the given date
+ *
  * @param {Date} date
  */
 function getMinutesOfDay(date)

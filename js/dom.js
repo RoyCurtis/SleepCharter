@@ -27,11 +27,7 @@ function generateTimeAxis()
     DOM.sleepChart.appendChild(timeAxis);
 }
 
-/**
- * Generates the top-of-page alert box
- *
- * @return {HTMLElement}
- */
+/** Generates the top-of-page alert box */
 function generateAlertBox()
 {
     var alertBox = DOM.alertBox = document.createElement("div");
@@ -62,6 +58,7 @@ function generateDayBars()
             bar1.from      = bar2.from      = from;
             bar1.to        = bar2.to        = to;
             bar1.isTopBar  = true;
+            bar2.isTopBar  = false;
             bar1.pairedBar = bar2;
             bar2.pairedBar = bar1;
 
@@ -86,8 +83,10 @@ function generateDayBars()
 }
 
 /**
+ * Fetches day bar element for a given date. Automatically generates missing DOM elements.
+ *
  * @param {Date} date
- * @returns {HTMLElement}
+ * @returns {DayBars~Day}
  */
 function getDOMForDay(date)
 {
@@ -95,6 +94,7 @@ function getDOMForDay(date)
         month = date.getMonth(),
         day   = date.getDate();
 
+    // Generates object and DOM for missing year
     if ( !DOM.dayBars[year] )
     {
         var yearDiv = DOM.dayBars[year] = document.createElement("div");
@@ -106,6 +106,7 @@ function getDOMForDay(date)
         DOM.sleepChart.appendChild(yearDiv);
     }
 
+    // Generates object and DOM for missing month
     if ( !DOM.dayBars[year][month] )
     {
         var monthDiv  = DOM.dayBars[year][month] = document.createElement("div"),
@@ -118,6 +119,7 @@ function getDOMForDay(date)
         DOM.dayBars[year].appendChild(monthDiv);
     }
 
+    // Generates object and DOM for missing day
     if ( !DOM.dayBars[year][month][day] )
     {
         var dayBar = DOM.dayBars[year][month][day] = document.createElement("div");
@@ -133,13 +135,18 @@ function getDOMForDay(date)
 }
 
 /**
+ * Rescales sleep bars to the current height of the chart. Necessary because I don't know
+ * how to properly use CSS for this task. This calls itself using requestAnimationFrame
+ * and only handles one sleep event per frame. This prevents locking up the page.
+ *
  * Note: Uses of "| 0" forces calculation into integer (rounded down)
  */
 function rescaleSleeps()
 {
+    // Halt if we've rescaled all bars in this run
     if (STATE.rescaleIdx >= DOM.sleepBars.length)
     {
-        DOM.alertBox.classList.add("hidden")
+        DOM.alertBox.classList.add("hidden");
         STATE.rescaling = false;
         return;
     }
@@ -149,6 +156,7 @@ function rescaleSleeps()
         requestAnimationFrame(rescaleSleeps);
     }
 
+    // Beginning a new run
     if (STATE.rescaleIdx === 0)
         DOM.alertBox.classList.remove("hidden");
 
@@ -158,9 +166,11 @@ function rescaleSleeps()
         height       = 0,
         minuteHeight = bar.parentNode.clientHeight / 1440;
 
+    // Handle sleep event that spans across days
+    // Note: Safe to assume a sleep event will never span more than two days
     if ( from.getDate() !== to.getDate() )
     {
-        if (bar.isTopBar === true)
+        if (bar.isTopBar)
         {
             height = 1440 - getMinutesOfDay(from);
             bar.style.top    = "0px";

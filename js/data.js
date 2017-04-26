@@ -26,7 +26,7 @@ function parseCSVLine(line)
 
     // Validate date pair
     if (end.getTime() - begin.getTime() <= 0)
-        throw new Error("End time is before begin time: " + line);
+        throw new Error("End time is before begin time", line);
 
     return [begin, end];
 }
@@ -42,9 +42,9 @@ function parseDate(date)
     var matches = date.match(GOOGLE_DATETIME_REGEX);
 
     if (!matches)
-        throw new Error("Date/time failed to parse: " + date);
+        throw new Error("Date/time failed to parse", date);
     else if (matches.index !== 0 || matches.length !== 7)
-        throw new Error("Date/time parsed incorrectly: " + date);
+        throw new Error("Date/time parsed incorrectly", date);
 
     return new Date(
         matches[3], matches[2] - 1, matches[1],

@@ -67,7 +67,7 @@ function main(file, selector)
     DOM.sleepChart = document.querySelector(selector);
 
     if (DOM.sleepChart === null)
-        throw new Error("No element found with given selector:", selector);
+        throw new Error("No element found with given selector", selector);
 
     // TODO: Use alert box to represent loading
     fetch(file)
@@ -86,6 +86,7 @@ function processResponse(response)
         return response.text();
 }
 
+/** Note: data comes from what processResponse returns, in the fetch promise chain */
 function processData(data)
 {
     STATE.entries = parseCSV(data);
