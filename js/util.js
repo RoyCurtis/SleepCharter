@@ -14,6 +14,26 @@ function getMinutesOfDay(date)
 }
 
 /**
+ * Generates informational message for a given sleep bar
+ *
+ * @param {SleepBar} sleep
+ * @return {string}
+ */
+function getSleepBarMessage(sleep)
+{
+    var from   = sleep.from,
+        to     = sleep.to,
+        length = ( to.getTime() - from.getTime() ) / 1000 / 60,
+        msg    = "";
+
+    msg += "From: " + sleep.from + "\n";
+    msg += "To: " + sleep.to + "\n";
+    msg += "Length: " + length + " minutes\n";
+
+    return msg;
+}
+
+/**
  * Sorts sleep events by earliest from-time to latest from-time
  *
  * @param {SleepEvent} a

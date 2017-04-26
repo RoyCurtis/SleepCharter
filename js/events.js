@@ -3,7 +3,12 @@
  * Roy Curtis, MIT license, 2017
  */
 
-/** @param {MouseEvent} evt */
+/**
+ * Handles mousing over of sleep bars. Uses the entire sleep chart element, so that we can
+ * avoid attaching an event listener to every single sleep bar.
+ *
+ * @param {MouseEvent} evt
+ */
 function onSleepChartMouseOver(evt)
 {
     /** @type HTMLElement|EventTarget */
@@ -28,16 +33,9 @@ function onSleepChartMouseOver(evt)
     // If started hovering over a(nother) bar
     if ( selected.classList.contains("bar") )
     {
-        STATE.selected = selected;
+        STATE.selected       = selected;
+        STATE.selected.title = getSleepBarMessage(selected);
         selected.classList.add("selected");
-
-        var from   = STATE.selected.from,
-            to     = STATE.selected.to,
-            length = ( to.getTime() - from.getTime() ) / 1000 / 60;
-
-        STATE.selected.title  = "From: " + STATE.selected.from + "\n";
-        STATE.selected.title += "To: " + STATE.selected.to + "\n";
-        STATE.selected.title += "Length: " + length + " minutes\n";
 
         if (STATE.selected.pairedBar)
             STATE.selected.pairedBar.classList.add("selected");
@@ -56,6 +54,21 @@ function onSleepChartMouseWheel(evt)
         ? evt.deltaY
         : evt.deltaY * 33;
     evt.preventDefault();
+}
+
+function onSleepChartClick(evt)
+{
+    /** @type SleepBar|EventTarget */
+    var selected = evt.target;
+
+    // Handle only sleep bars
+    if ( !selected.classList.contains("bar") )
+        return;
+
+    window.alert( getSleepBarMessage(selected) );
+
+    if (STATE.selected.pairedBar)
+        STATE.selected.pairedBar.classList.add("selected");
 }
 
 function onSleepChartResize()
