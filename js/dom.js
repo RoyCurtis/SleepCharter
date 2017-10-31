@@ -131,7 +131,7 @@ function getDOMForDay(date)
 /**
  * Rescales sleep bars to the current height of the chart. Necessary because I don't know
  * how to properly use CSS for this task. This calls itself using requestAnimationFrame
- * and only handles one sleep event per frame. This prevents locking up the page.
+ * and batches a few sleep events per frame. This prevents locking up the page.
  *
  * It turns out, spreading this across rAF frames was very necessary for Firefox. Flexbox
  * seems to be extremely slow in Firefox (TODO: Try to fix this)
@@ -156,6 +156,21 @@ function rescaleSleeps()
     // Beginning a new run
     if (STATE.rescaleIdx === 0)
         DOM.alertBox.classList.remove("hidden");
+
+    for (var i = 0; i < 10; i++)
+        rescaleSingleSleep();
+
+    DOM.alertBox.innerHTML = "Redrawing chart ("
+        + STATE.rescaleIdx
+        + "/" + DOM.sleepBars.length
+        + ")...";
+}
+
+function rescaleSingleSleep()
+{
+    // TODO: Is there a more DRY way of doing this?
+    if (STATE.rescaleIdx >= DOM.sleepBars.length)
+        return;
 
     var bar          = DOM.sleepBars[STATE.rescaleIdx],
         from         = bar.from,
@@ -187,9 +202,5 @@ function rescaleSleeps()
         bar.style.height = ( (height * minuteHeight) | 0 ) + "px";
     }
 
-    DOM.alertBox.innerHTML = "Redrawing chart ("
-        + STATE.rescaleIdx
-        + "/" + DOM.sleepBars.length
-        + ")...";
     STATE.rescaleIdx++;
 }
