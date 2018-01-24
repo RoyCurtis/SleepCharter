@@ -10,9 +10,7 @@ html, body
     height: 100%;
 
     background:  #EEEEEE;
-    display:     flex;
     font-family: sans-serif;
-    overflow:    hidden;
 }
 
 *
@@ -21,17 +19,20 @@ html, body
     margin:     0;
     padding:    0;
 }
+
+body
+{
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
 /*</editor-fold>*/
 
 /*<editor-fold desc="Chart">*/
 sleep-chart
 {
-    width: 100%;
-
-    display:     flex;
-    flex-shrink: 0;
-    padding:     1em;
-    overflow:    auto;
+    display:      block;
+    overflow:     hidden;
+    padding-left: 16px;
 }
 
 sleep-chart.nojs
@@ -49,11 +50,7 @@ sleep-chart.nojs
 /*<editor-fold desc="Chart - left side hour axis">*/
 sleep-chart > .axis
 {
-    top: 1.25em;
-
     color:          black;
-    display:        flex;
-    flex-direction: column-reverse;
     opacity:        0.5;
     pointer-events: none;
     position:       fixed;
@@ -62,15 +59,16 @@ sleep-chart > .axis
 
 sleep-chart > .axis > .hour
 {
+    height: 4.16666%;
+
     align-items:   center;
     border-bottom: 1px solid rgba(0,0,0,0.5);
-    display:       flex;
-    flex-grow:     1;
     font-size:     0.75em;
     font-weight:   bold;
+    line-height:   175%;
 }
 
-sleep-chart > .axis > .hour:first-child { border-bottom: none; }
+sleep-chart > .axis > .hour:last-child { border-bottom: none; }
 /*</editor-fold>*/
 
 /*<editor-fold desc="Chart - alert box">*/
@@ -110,16 +108,19 @@ sleep-chart > year > month:nth-child(odd) > day > label
 /*<editor-fold desc="Chart - Years">*/
 sleep-chart > year
 {
-    display: flex;
+    top: 0;
+
+    display:  block;
+    position: absolute;
 }
 
 sleep-chart > year > label
 {
-    width: 0;
-    
-    align-self:  flex-end;
+    bottom: 16px;
+
     font-size:   4em;
-    line-height: 0.7em;
+    line-height: 0.8em;
+    position:    absolute;
     z-index:     500;
 }
 /*</editor-fold>*/
@@ -127,30 +128,32 @@ sleep-chart > year > label
 /*<editor-fold desc="Chart - Months">*/
 sleep-chart > year > month
 {
-    display: flex;
+    top: 0;
+
+    display:  block;
+    position: absolute;
 }
 
 sleep-chart > year > month > label
 {
-    width: 0;
+    bottom: 70px;
 
-    align-self:     flex-end;
-    font-size:      2em;
-    padding-bottom: 1.6em;
-    z-index:        500;
+    font-size: 2em;
+    position:  absolute;
+    z-index:   500;
 }
 /*</editor-fold>*/
 
 /*<editor-fold desc="Chart - Days">*/
 sleep-chart > year > month > day
 {
-    width: 1em;
+    top:   16px;
+    width: 16px;
 
-    flex-shrink:   0;
-    margin-bottom: 7em;
+    display:       inline-block;
     position:      relative;
-    border-top:    0.25em solid #CCCCCC;
-    border-bottom: 0.25em solid #CCCCCC;
+    border-top:    4px solid #CCCCCC;
+    border-bottom: 4px solid #CCCCCC;
 }
 
 sleep-chart > year > month > day:hover {

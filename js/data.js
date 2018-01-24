@@ -4,6 +4,20 @@
  */
 
 /**
+ * Regex pattern for Google Sheets default date/time format (DD/MM/YYYY HH:mm:ss).
+ *
+ * Capture groups:
+ * 1: DD (day)
+ * 2: MM (month)
+ * 3: YYYY (year)
+ * 4: HH (24 hour)
+ * 5: mm (minute)
+ * 6: ss (second)
+ * @type {RegExp}
+ */
+var GOOGLE_DATETIME_REGEX = /(\d{2}).(\d{2}).(\d{4}) (\d{2}):(\d{2}):(\d{2})/;
+
+/**
  * Parses the given raw CSV data into an array of {@link SleepEvent}s
  *
  * @param {string} csv

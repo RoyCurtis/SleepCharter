@@ -73,9 +73,9 @@ function onSleepChartClick(evt)
 
 function onSleepChartResize()
 {
-    // This is necessary, because making fixed elements work with em/vh heights whilst
-    // accounting for scrollbar offset, is just too difficult...
-    DOM.timeAxis.style.height = DOM.sleepBars[0].parentNode.clientHeight + "px";
+    layoutSleepBars();
+    layoutTimeAxis();
+
     STATE.rescaleIdx = 0;
 
     if (!STATE.rescaling)

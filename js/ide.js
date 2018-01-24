@@ -17,7 +17,7 @@
  * * Integer index to a month's DIV element (e.g. `dayBars[2017][2]`)
  * * Integer index to a day's DIV element (e.g. `dayBars[2017][2][26]`)
  *
- * @typedef {Object.<number, DayBars~Month>} DayBars
+ * @typedef {Object.<number, (DayBars~Month|HTMLElement)>} DayBars
  */
 
 /**

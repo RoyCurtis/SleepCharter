@@ -10,14 +10,14 @@ function generateTimeAxis()
 
     timeAxis.className = "axis";
 
-    for (var h = 0; h < 24; h++)
+    for (var h = 23; h >= 0; h--)
     {
         var hourBox = document.createElement("div");
 
         hourBox.className = "hour";
         hourBox.innerHTML = h < 10
-            ? "0" + h
-            : h;
+            ? "0" + h // Single digit hours (e.g. 01, 02)
+            : h;      // Double digit hours (e.g. 11, 12)
 
         hourBox.innerHTML += ":00";
 

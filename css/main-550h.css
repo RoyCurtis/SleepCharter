@@ -17,11 +17,6 @@ sleep-chart > year > label
 
 sleep-chart > year > month > label
 {
-    font-size:      0.75em;
-    padding-bottom: 1.6em;
-}
-
-sleep-chart > year > month > day
-{
-    margin-bottom: 3.5em;
+    bottom:    35px;
+    font-size: 0.75em;
 }
