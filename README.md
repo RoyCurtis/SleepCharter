@@ -25,7 +25,6 @@ and "Wake". [Both columns use the Date/time format][2]. To use this data in Slee
 
 * Using JS to manually scale the sleep bars is not ideal. I've tried my best to use CSS
 for this purpose (e.g. percentages, relative positioning) but I couldn't figure it out.
-* Sleep bar (re)sizing is very slow on Firefox; probably due to flexbox use
 
 [1]: http://i.imgur.com/f4Vmla7.png
 [2]: http://i.imgur.com/gWCZpfT.png
