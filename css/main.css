@@ -82,13 +82,14 @@ sleep-chart > .alert
     left:  25vw;
     width: 50vw;
 
-    background: rgba(0, 0, 0, 0.75);
-    color:      white;
-    font-size:  1em;
-    padding:    0.5em;
-    position:   fixed;
-    text-align: center;
-    z-index:    999;
+    background:  rgba(0, 0, 0, 0.75);
+    color:       white;
+    font-size:   1em;
+    padding:     0.5em;
+    position:    fixed;
+    text-align:  center;
+    white-space: normal;
+    z-index:     999;
 }
 
 sleep-chart > .alert.hidden { display: none; }
