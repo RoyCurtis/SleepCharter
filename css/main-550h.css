@@ -8,6 +8,11 @@ sleep-chart
     padding-top: 0;
 }
 
+sleep-chart.nojs
+{
+    padding-top: 16px;
+}
+
 sleep-chart > .axis > .hour
 {
     border:    none;
