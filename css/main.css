@@ -11,6 +11,7 @@ html, body
 
     background:  #EEEEEE;
     font-family: sans-serif;
+    overflow:    hidden;
 }
 
 *
@@ -19,20 +20,17 @@ html, body
     margin:     0;
     padding:    0;
 }
-
-body
-{
-    overflow-x: scroll;
-    overflow-y: hidden;
-}
 /*</editor-fold>*/
 
 /*<editor-fold desc="Chart">*/
 sleep-chart
 {
     display:      block;
-    overflow:     hidden;
+    padding-top:  16px;
     padding-left: 16px;
+    overflow-x:   auto;
+    overflow-y:   hidden;
+    white-space:  nowrap;
 }
 
 sleep-chart.nojs
@@ -108,19 +106,18 @@ sleep-chart > year > month:nth-child(odd) > day > label
 /*<editor-fold desc="Chart - Years">*/
 sleep-chart > year
 {
-    top: 0;
-
-    display:  block;
-    position: absolute;
+    display: inline-block;
 }
 
 sleep-chart > year > label
 {
-    bottom: 16px;
+    width:  0;
+    height: 0;
 
     font-size:   4em;
     line-height: 0.8em;
-    position:    absolute;
+    display:     block;
+    position:    relative;
     z-index:     500;
 }
 /*</editor-fold>*/
@@ -128,18 +125,17 @@ sleep-chart > year > label
 /*<editor-fold desc="Chart - Months">*/
 sleep-chart > year > month
 {
-    top: 0;
-
-    display:  block;
-    position: absolute;
+    display: inline-block;
 }
 
 sleep-chart > year > month > label
 {
-    bottom: 70px;
+    width:  0;
+    height: 0;
 
     font-size: 2em;
-    position:  absolute;
+    display:   block;
+    position:  relative;
     z-index:   500;
 }
 /*</editor-fold>*/
@@ -147,7 +143,6 @@ sleep-chart > year > month > label
 /*<editor-fold desc="Chart - Days">*/
 sleep-chart > year > month > day
 {
-    top:   16px;
     width: 16px;
 
     display:       inline-block;

@@ -3,6 +3,11 @@
  * Roy Curtis, MIT license, 2017
  */
 
+sleep-chart
+{
+    padding-top: 0;
+}
+
 sleep-chart > .axis > .hour
 {
     border:    none;

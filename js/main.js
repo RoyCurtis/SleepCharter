@@ -89,9 +89,9 @@ function processDOM()
     DOM.sleepChart.innerHTML = "";
     DOM.sleepChart.classList.remove("nojs");
 
+    generateSleepBars();
     generateAlertBox();
     generateTimeAxis();
-    generateSleepBars();
 }
 
 function finalize()

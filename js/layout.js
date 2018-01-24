@@ -20,26 +20,26 @@ function layoutTimeAxis()
     if (document.body.clientHeight > 550)
     {
         height = document.body.clientHeight
-            - 20   // 20px top margin
-            - 128; // 128px bottom margin
+            - 20   // top margin
+            - 145; // bottom margin
 
         left = DOM.sleepChart.offsetLeft
-            + 16; // 16px left margin;
+            + 16; // left margin
 
         top = DOM.sleepChart.offsetTop
-            + 20; // 20px top margin;
+            + 20; // top margin
     }
     else
     {
         height = document.body.clientHeight
-            - 20   // 20px top margin
-            - 72; // 72px bottom margin
+            - 20  // top margin
+            - 64; // bottom margin
 
         left = DOM.sleepChart.offsetLeft
-            + 16; // 16px left margin;
+            + 16; // left margin
 
         top = DOM.sleepChart.offsetTop
-            + 20; // 20px top margin;
+            + 4; // top border
     }
 
     timeAxis.style.height = height + "px";
@@ -51,90 +51,97 @@ function layoutSleepBars()
 {
     DOM.sleepChart.style.height = document.body.clientHeight + "px";
 
-    /** @type HTMLElement */
-    var lastYear = null;
-
+    // Recursively calculate metrics for year, month, and day bars
     for (var yearNum in DOM.dayBars)
     {
         if ( !DOM.dayBars.hasOwnProperty(yearNum) )
             continue;
 
-        layoutYear(DOM.dayBars[yearNum], lastYear);
-        lastYear = DOM.dayBars[yearNum];
+        layoutYear(DOM.dayBars[yearNum]);
+    }
+
+    // Calculate positions for date labels (because relative positioning doesn't work)
+    var yearLabels  = document.querySelectorAll("sleep-chart > year > label");
+    var monthLabels = document.querySelectorAll("sleep-chart > year > month > label");
+    var yearTop, monthTop;
+
+    if (document.body.clientHeight > 550)
+    {
+        yearTop = DOM.sleepChart.offsetHeight
+            - 44  // text height
+            - 52; // bottom margin
+
+        monthTop = DOM.sleepChart.offsetHeight
+            - 44  // year text height
+            - 37  // text height
+            - 56; // bottom margin
+    }
+    else
+    {
+        yearTop = DOM.sleepChart.offsetHeight
+            - 14  // text height
+            - 24; // bottom margin
+
+        monthTop = DOM.sleepChart.offsetHeight
+            - 14  // year text height
+            - 14  // text height
+            - 28; // bottom margin
+    }
+
+    for (var i = 0; i < yearLabels.length; i++)
+    {
+        var yearLabel = yearLabels[i];
+        yearLabel.style.top = yearTop + "px";
+    }
+
+    for (var j = 0; j < monthLabels.length; j++)
+    {
+        var monthLabel = monthLabels[j];
+        monthLabel.style.top = monthTop + "px";
     }
 }
 
-function layoutYear(year, lastYear)
+function layoutYear(year)
 {
-    year.style.height = document.body.clientHeight + "px";
-
-    /** @type HTMLElement */
-    var lastMonth = null;
     var yearWidth = 0;
-
-    if (lastYear)
-    {
-        var left = lastYear.offsetLeft
-            + lastYear.offsetWidth;
-
-        year.style.left = left + "px";
-    }
 
     for (var monthNum in year)
     {
         if ( !year.hasOwnProperty(monthNum) )
             continue;
 
-        layoutMonth(year[monthNum], lastMonth);
-        lastMonth  = year[monthNum];
+        layoutMonth(year[monthNum]);
         yearWidth += year[monthNum].offsetWidth;
     }
-
-    year.style.width = yearWidth + "px";
 }
 
-function layoutMonth(month, lastMonth)
+function layoutMonth(month)
 {
-    month.style.height = document.body.clientHeight + "px";
-
-    /** @type HTMLElement */
-    var lastDay  = null;
     var dayCount = 0;
-
-    if (lastMonth)
-    {
-        var left = lastMonth.offsetLeft
-            + lastMonth.offsetWidth;
-
-        month.style.left = left + "px";
-    }
 
     for (var dayNum in month)
     {
         if ( !month.hasOwnProperty(dayNum) )
             continue;
 
-        layoutDay(month[dayNum], lastDay);
-        lastDay = month[dayNum];
+        layoutDay(month[dayNum]);
 
         dayCount++;
     }
-
-    month.style.width = (16 * dayCount) + "px";
 }
 
-function layoutDay(day, lastDay)
+function layoutDay(day)
 {
     var height;
 
     if (document.body.clientHeight > 550)
         height = document.body.clientHeight
-            - 16   // 16px top margin
-            - 128; // 128px bottom margin
+            - 16   // top margin
+            - 145; // bottom margin
     else
         height = document.body.clientHeight
-            - 16   // 16px top margin
-            - 72; // 72px bottom margin
+            - 16  // top margin
+            - 64; // bottom margin
 
     day.style.height = height + "px";
 }
