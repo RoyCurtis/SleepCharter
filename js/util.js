@@ -7,10 +7,22 @@
  * Gets how many minutes have passed in the entire day, of the given date
  *
  * @param {Date} date
+ * @return {Number}
  */
 function getMinutesOfDay(date)
 {
     return (date.getHours() * 60) + date.getMinutes();
+}
+
+/**
+ * Gets how many integer days have passed since epoch, of the given date
+ *
+ * @param {Date} date
+ * @return {Number}
+ */
+function getDaysSinceEpoch(date)
+{
+    return (date.valueOf() / 8.64e+7) | 0;
 }
 
 /**
@@ -26,6 +38,9 @@ function getSleepBarMessage(sleep)
         minutes = ( to.getTime() - from.getTime() ) / 1000 / 60,
         hours   = (minutes / 60) | 0,
         msg     = "";
+
+    if (sleep.isPrediction)
+        msg += "This is a prediction for a future sleep event..." + "\n";
 
     msg += "From: " + sleep.from + "\n";
     msg += "To: " + sleep.to + "\n";

@@ -21,6 +21,7 @@ var GOOGLE_DATETIME_REGEX = /(\d{2}).(\d{2}).(\d{4}) (\d{2}):(\d{2}):(\d{2})/;
  * Parses the given raw CSV data into an array of {@link SleepEvent}s
  *
  * @param {string} csv
+ * @returns {SleepEvent[]}
  */
 function parseCSV(csv)
 {
@@ -64,4 +65,50 @@ function parseDate(date)
         matches[3], matches[2] - 1, matches[1],
         matches[4], matches[5], matches[6]
     );
+}
+
+/**
+ * Takes a small amount of the end of the given entries, then timeshifts them by a certain
+ * amount of days, and adds them to the end
+ *
+ * @param {SleepEvent[]} data
+ * @return {SleepEvent[]}
+ */
+function predictEvents(data)
+{
+    var MAX_PREDICTED_EVENTS = 30;
+
+    /** @type SleepEvent[] */
+    var future = data.slice(-MAX_PREDICTED_EVENTS);
+
+    if (future.length < MAX_PREDICTED_EVENTS)
+        throw new Error("Not enough events to predict the future...");
+
+    var first = future[0],
+        last  = future[MAX_PREDICTED_EVENTS - 1];
+
+    // First, find difference in days between first and last...
+    var daysDiff = getDaysSinceEpoch(last[0]) - getDaysSinceEpoch(first[0]);
+
+    for (var i = 0; i < future.length; i++)
+    {
+        // Make copies of the tuples and dates...
+        future[i]    = future[i].slice();
+        future[i][0] = new Date( future[i][0].valueOf() );
+        future[i][1] = new Date( future[i][1].valueOf() );
+
+        // Shift by difference in dates
+        future[i][0].setDate(future[i][0].getDate() + daysDiff + 1);
+        future[i][1].setDate(future[i][1].getDate() + daysDiff + 1);
+
+        // Shift by a few hours...
+        // TODO: lazily done. smarter way to do this? needs adjusting if MAX changes
+        future[i][0].setHours(future[i][0].getHours() + 3);
+        future[i][1].setHours(future[i][1].getHours() + 3);
+
+        future[i].isPrediction = true;
+        data.push(future[i]);
+    }
+
+    return data;
 }

@@ -40,12 +40,14 @@
  * @prop {Date} to Gets the end date and time of this sleep bar's event
  * @prop {?boolean} isTopBar Whether this is a top bar, if this bar is split across days
  * @prop {?SleepBar} pairedBar Gets the paired bar, if this bar is split across days
+ * @prop {?boolean} isPrediction Whether this bar's event is a prediction
  */
 
 /**
  * A tuple for a sleep event. First and second elements are start and end dates.
  *
  * @typedef {[Date, Date]} SleepEvent
+ * @prop {boolean} isPrediction Whether this event is a prediction
  */
 
 /*

@@ -187,4 +187,14 @@ sleep-chart > year > month > day > sleep.selected
 {
     background: #9DC3CC;
 }
+
+sleep-chart > year > month > day > sleep.prediction
+{
+    background: #8F8F8F;
+}
+
+sleep-chart > year > month > day > sleep.selected.prediction
+{
+    background: #CCCCCC;
+}
 /*</editor-fold>*/

@@ -63,6 +63,14 @@ function generateSleepBars()
             bar1.pairedBar = bar2;
             bar2.pairedBar = bar1;
 
+            if (sleep.isPrediction)
+            {
+                bar1.classList.add("prediction");
+                bar2.classList.add("prediction");
+                bar1.isPrediction = true;
+                bar2.isPrediction = true;
+            }
+
             fromDOM.appendChild(bar1);
             toDOM.appendChild(bar2);
             DOM.sleepBars.push(bar1, bar2);
@@ -75,6 +83,12 @@ function generateSleepBars()
 
             bar.from = from;
             bar.to   = to;
+
+            if (sleep.isPrediction)
+            {
+                bar.classList.add("prediction");
+                bar.isPrediction = true;
+            }
 
             fromDOM.appendChild(bar);
             DOM.sleepBars.push(bar);
@@ -134,6 +148,8 @@ function getDOMForDay(date)
  * and batches a few sleep events per frame. This prevents locking up the page.
  *
  * Note: Uses of "| 0" forces calculation into integer (rounded down)
+ *
+ * TODO: These should probably be moved into layout.js
  */
 function rescaleSleeps()
 {
