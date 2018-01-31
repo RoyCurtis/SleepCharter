@@ -98,8 +98,8 @@ function predictEvents(data)
         future[i][1] = new Date( future[i][1].valueOf() );
 
         // Shift by difference in dates
-        future[i][0].setDate(future[i][0].getDate() + daysDiff + 1);
-        future[i][1].setDate(future[i][1].getDate() + daysDiff + 1);
+        future[i][0].setDate(future[i][0].getDate() + daysDiff);
+        future[i][1].setDate(future[i][1].getDate() + daysDiff);
 
         // Shift by a few hours...
         // TODO: lazily done. smarter way to do this? needs adjusting if MAX changes
